@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const nodemailer = require("nodemailer");
 const { EMAIL, PASS } = require('./config.json');
 
@@ -11,15 +13,17 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
+const htmlContent = fs.readFileSync(path.join(__dirname, "test.html"), "utf8");
+
 // async..await is not allowed in global scope, must use a wrapper
 async function main() {
 	// send mail with defined transport object
 	const info = await transporter.sendMail({
 		from: '"Maddison Foo Koch 👻" <marquesdinis.p@gmail.com>', // sender address
-		to: "yesyes@mailinator.com", // list of receivers
+		to: "marquesdinis.p@gmail.com", // list of receivers
 		subject: "Hello ✔", // Subject line
 		text: "Hello world?", // plain text body
-		html: '<h1> test!!!</h1>', // html body
+		html: `${htmlContent}`, // html body
 	});
 
 	console.log("Message sent: %s", info.messageId);
